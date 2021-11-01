@@ -1,0 +1,341 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+
+@color-bg-dark: #000B13;
+@color-bg-blue: #001D36;
+@color-white: #F1F7FD;
+@color-grey: #B9D2E7;
+@color-blue: #006FDE;
+@color-blue-darker: #005fbe;
+@color-bg-orange: #995600;
+@color-orange:#F58B00;
+
+
+*{
+    box-sizing:border-box;
+}
+
+:root{
+    font-size: 13pt;
+    background: @color-bg-dark;
+}
+
+body{
+    margin:0;
+    padding:0;
+    width:100vw;
+    height:100vh;
+    overflow: hidden;
+    font-family: "Barlow Condensed", sans-serif;
+
+    &>div{
+        width:100%;
+        height:100%;
+    }
+
+    &>.inactive{
+        display: none !important;
+    }
+
+    background: @color-bg-dark;
+}
+
+.leaflet-image-layer{
+    opacity:1;
+    transition: opacity 0.2s;
+}
+
+
+
+.guess-picker{
+    width:60em;
+    background:@color-bg-blue;
+    display:flex;
+    align-items: stretch;
+
+    border-top-right-radius: 0.4em;
+        
+
+    .list-container{
+        width: 18rem;
+        height: 30rem;
+
+        font-size: 1.5em;
+        font-weight: 500;
+
+        display:flex;
+        flex-direction: column;
+    }
+
+    .list-header{
+        margin-top:0.5em;
+        margin-bottom:0.5em;
+        background: @color-bg-dark;
+        color:@color-white;
+        padding:0.3em 2em;
+        font-weight:700;
+
+        position: relative;
+
+        .navarrow{
+            font-style:normal;
+            position: absolute;
+            &.prev{left:0;right:50%;}
+            &.next{right:0;left:50%;text-align: right;}
+
+            cursor:pointer;
+
+            &:hover{
+                color:@color-white;
+            }
+
+            &.disabled{
+                display: none;
+            }
+
+            font-size:0.7em;
+            padding: 0.2em 0.5em;
+            color:@color-grey;
+        }
+    }
+
+    .list{
+        margin:0;
+        padding:0;
+        list-style-type: none;
+
+        overflow-y: scroll;
+        flex-grow: 1;
+
+        color:@color-white;
+        li{
+            margin:0;
+            padding:0.3em 0.6em;
+            cursor:pointer;
+
+            &:hover{
+                background:@color-bg-blue;
+            }
+
+            &.selected{
+                background:@color-bg-dark;
+                cursor:default;
+            }
+        }
+    }
+
+    .map-container{
+        display:block;
+        flex-grow:1;
+        position:relative;
+        padding:0.5em;
+        padding-bottom: 3.5em;
+    }
+
+    .map{
+        background:black;
+        height:100%;
+        border-radius: 0.4em;
+    }
+
+    .guess-btn{
+        position:absolute;
+        bottom:0.5em;
+        left: 0.5em;
+        right:0.5em;
+        text-align: center;
+        height:2.5em;
+        background:@color-blue;
+        text-transform: uppercase;
+        font-weight: bold;
+        color:@color-white;
+        opacity:1;
+        line-height: 2.5em;
+
+        span{
+            font-size:1.5em;
+        }
+
+        border-radius: 0.4em;
+        cursor:pointer;
+        &:hover{
+            background:@color-blue-darker;
+        }
+
+        &.inactive{
+            background:@color-blue;
+            color:@color-white;
+            opacity:0.2;
+            cursor:default;
+        }
+    }
+}
+
+
+
+
+#game{
+    width:100%;
+    height:100%;
+    position:relative;
+    user-select: none;
+
+    #photo{
+        width:100%;
+        height:100%;
+
+        background-size:cover;
+    }
+
+    .info{
+        position:absolute;
+        top:1em;
+        right:1em;
+        background:#000c;
+        color:@color-white;
+
+        display:flex;
+        flex-direction: column;
+
+        border-radius: 0.4em;
+
+        padding: 0.3em;
+
+        &>div{
+            padding: 0.1em 0.5em;
+
+            font-weight: 600;
+            font-size:1.6em;
+            width:8em;
+
+            display:flex;
+            justify-content: space-between;
+
+            p{
+                margin:0;
+                &::after{
+                    content: ":";
+                }
+            }
+        }
+    }
+
+    .guess-popup{
+        position: absolute;
+        bottom:1em;
+        right:1em;
+
+        width: 60rem;
+        height: 35rem;
+        overflow: hidden;
+        border-radius: 0.4em;
+
+        transition: width 0.2s, height 0.2s;
+
+        &.hidden{
+            width: 17rem;
+            height: 5rem;
+
+            cursor:pointer;
+
+            h2{
+                &:hover{
+                    background:@color-blue-darker;
+                }
+                background:@color-blue;
+            }
+        }
+
+        h2{
+            color:@color-white;
+            text-transform: uppercase;
+            padding: 0.4em 0.4em;
+            background:@color-bg-blue;
+            display:inline-block;
+            margin:0;
+            font-size:2.5em;
+            width: 18rem;
+            height: 5rem;
+            white-space: nowrap;
+
+            border-top-right-radius: 0.2em;
+        }
+    }
+
+    .photo-container{
+        background-color: black;
+    }
+}
+
+
+#guess{
+    display:flex;
+    flex-direction: column;
+    #resultmap{
+        background:black;
+        width:100%;
+        flex-grow: 1;
+    }
+
+    .result-container{
+        width:100%;
+        padding: 2em;
+        background:@color-bg-blue;
+        text-align: center;
+
+        .result-container-inner{
+            display:inline-flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+
+        #result-points{
+            margin:0;
+            margin-bottom:0.5em;
+            color:@color-white;
+        }
+
+        .points-bar{
+            width:40em;
+            height:1em;
+            background:@color-grey;
+
+            border-radius: 1em;
+            overflow: hidden;
+
+            #result-points-bar{
+                width:50%;
+                height:100%;
+                background:@color-orange;
+            }
+        }
+
+        #result-title{
+            font-weight: 500;
+            margin:0.5em;
+            color:@color-grey;
+        }
+
+        .result-button{
+
+            background:@color-blue;
+            color:@color-white;
+            width:8em;
+            line-height: 2.5em;
+            font-size:1.2em;
+            text-transform: uppercase;
+            font-weight: bold;
+            border-radius: 0.4em;
+            
+            cursor:pointer;
+            &:hover{
+                background:@color-blue-darker;
+            }
+
+            &.inactive{
+                display:none;
+            }
+        }
+    }
+}
